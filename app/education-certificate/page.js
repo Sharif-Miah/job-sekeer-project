@@ -9,8 +9,15 @@ import { Trash2, Plus } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import FileUploadArea from '../work-experience-skills/_components/FileUploadArea';
 import ProgreesingBar from '@/components/ProgreesingBar';
+import {
+  Dropzone,
+  DropzoneContent,
+  DropzoneEmptyState,
+} from '@/components/ui/shadcn-io/dropzone';
+import EducationCertificateForm from './_components/EducationCertificateForm';
 
 export default function EducationForm() {
+  const [files, setFiles] = useState();
   const [degrees, setDegrees] = useState([
     {
       id: 1,
@@ -31,6 +38,11 @@ export default function EducationForm() {
     startDate: '',
     endDate: '',
   });
+
+  const handleDrop = (files) => {
+    console.log(files);
+    setFiles(files);
+  };
 
   const handleAddDegree = () => {
     if (newDegree.degree && newDegree.institution) {
@@ -167,102 +179,11 @@ export default function EducationForm() {
       {/* Add New Degree Form */}
       <div className='border-t pt-8'>
         <div className='space-y-6'>
-          <div className='grid grid-cols-2 gap-6'>
-            <div className='space-y-2'>
-              <Label
-                htmlFor='degree'
-                className='text-sm font-medium'>
-                Your Degree
-              </Label>
-              <Input
-                id='degree'
-                name='degree'
-                placeholder="e.g., Bachelor's, Masters"
-                value={newDegree.degree}
-                onChange={handleInputChange}
-                className='border-gray-300'
-              />
-            </div>
-            <div className='space-y-2'>
-              <Label
-                htmlFor='institution'
-                className='text-sm font-medium'>
-                Institution Name
-              </Label>
-              <Input
-                id='institution'
-                name='institution'
-                placeholder='e.g., Dhaka University'
-                value={newDegree.institution}
-                onChange={handleInputChange}
-                className='border-gray-300'
-              />
-            </div>
-          </div>
-
-          <div className='grid grid-cols-2 gap-6'>
-            <div className='space-y-2'>
-              <Label
-                htmlFor='major'
-                className='text-sm font-medium'>
-                Major
-              </Label>
-              <Input
-                id='major'
-                name='major'
-                placeholder='e.g., Electronics and Communication Engineering'
-                value={newDegree.major}
-                onChange={handleInputChange}
-                className='border-gray-300'
-              />
-            </div>
-            <div className='space-y-2'>
-              <Label
-                htmlFor='graduation'
-                className='text-sm font-medium'>
-                Graduation
-              </Label>
-              <div className='flex gap-2'>
-                <Input
-                  type='date'
-                  name='startDate'
-                  value={newDegree.startDate}
-                  onChange={handleInputChange}
-                  className='border-gray-300'
-                />
-                <Input
-                  type='date'
-                  name='endDate'
-                  value={newDegree.endDate}
-                  onChange={handleInputChange}
-                  className='border-gray-300'
-                />
-              </div>
-            </div>
-          </div>
+          <EducationCertificateForm />
         </div>
-
-        {/* Add Another Degree Link */}
-
-        <FileUploadArea />
-
-        <button
-          onClick={handleAddDegree}
-          className='text-green-500 hover:text-green-600 text-sm font-medium mt-6 flex items-center gap-1'>
-          <Plus className='w-4 h-4' />
-          Add Another Degree
-        </button>
       </div>
 
       {/* Navigation Buttons */}
-      <div className='flex gap-4 pt-8'>
-        <Button className='flex-1 bg-gray-500 hover:bg-gray-600 text-white'>
-          ← Back
-        </Button>
-        <Button className='flex-1 bg-green-500 hover:bg-green-600 text-white'>
-          Next →
-        </Button>
-      </div>
     </div>
   );
 }
