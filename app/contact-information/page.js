@@ -1,5 +1,5 @@
 import ContactInformationForm from './_component/ContactInformationForm';
-import ContactPrograsingBar from './_component/contactPrograsingBar';
+import ContactPrograsingBar from './_component/ContactPrograsingBar';
 
 export default function ContactInfoForm() {
   return (
