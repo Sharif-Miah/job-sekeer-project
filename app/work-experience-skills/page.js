@@ -1,45 +1,49 @@
 'use client';
-
 import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { X, Plus } from 'lucide-react';
+import { X, Plus, Trash2 } from 'lucide-react';
+
+import SkillsInput from './_components/SkillsInput';
+import WorkExperienceProgress from './_components/WorkExperienceProgress';
 import {
   Dropzone,
   DropzoneContent,
   DropzoneEmptyState,
 } from '@/components/ui/shadcn-io/dropzone';
+import { useLocalStorage } from '@/hook/useLocalStorage';
 
-import FileUploadArea from './_components/FileUploadArea';
-import ProgressStepper from './_components/ProgressStepper';
-import SkillsInput from './_components/SkillsInput';
-import ProgreesingBar from '@/components/ProgreesingBar';
-import WorkExperienceProgress from './_components/WorkExperienceProgress';
+const initialFormState = {
+  jobTitle: '',
+  companyName: '',
+  startDate: '',
+  endDate: '',
+  jobDescription: '',
+  achievements: '',
+  skills: [],
+};
 
 export default function WorkExperiencePage() {
-  const [formData, setFormData] = useState([
-    {
-      jobTitle: '',
-      companyName: '',
-      startDate: '',
-      endDate: '',
-      jobDescription: '',
-      achievements: '',
-      skills: [],
-    },
-  ]);
+  const [formData, setFormData, formLoaded] = useLocalStorage(
+    'workExperienceFormData',
+    initialFormState
+  );
+  const [experiences, setExperiences, experiencesLoaded] = useLocalStorage(
+    'workExperiences',
+    []
+  );
 
   const [files, setFiles] = useState();
+  const [showForm, setShowForm] = useState(true);
+  const [editingId, setEditingId] = useState(null);
+
   const handleDrop = (files) => {
     console.log(files);
     setFiles(files);
   };
-
-  const [experiences, setExperiences] = useState([]);
-  const [showForm, setShowForm] = useState(true);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -63,28 +67,64 @@ export default function WorkExperiencePage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (formData.jobTitle && formData.companyName) {
-      setExperiences([...experiences, { ...formData, id: Date.now() }]);
-      setFormData({
-        jobTitle: '',
-        companyName: '',
-        startDate: '',
-        endDate: '',
-        jobDescription: '',
-        achievements: '',
-        skills: [],
-      });
+      if (editingId) {
+        // Update existing experience
+        setExperiences((prev) =>
+          prev.map((exp) =>
+            exp.id === editingId ? { ...formData, id: editingId } : exp
+          )
+        );
+        setEditingId(null);
+      } else {
+        // Add new experience
+        setExperiences((prev) => [...prev, { ...formData, id: Date.now() }]);
+      }
+
+      // Reset form
+      setFormData(initialFormState);
     }
   };
 
+  const handleEdit = (experience) => {
+    setFormData({
+      jobTitle: experience.jobTitle,
+      companyName: experience.companyName,
+      startDate: experience.startDate,
+      endDate: experience.endDate,
+      jobDescription: experience.jobDescription,
+      achievements: experience.achievements,
+      skills: [...experience.skills],
+    });
+    setEditingId(experience.id);
+    setShowForm(true);
+  };
+
+  const handleDelete = (id) => {
+    setExperiences((prev) => prev.filter((exp) => exp.id !== id));
+  };
+
+  const handleCancel = () => {
+    setFormData(initialFormState);
+    setEditingId(null);
+    setShowForm(false);
+  };
+
   const handleNext = () => {
-    // Navigate to next step
-    console.log('Moving to next step');
+    console.log('Moving to next step with experiences:', experiences);
   };
 
   const handleBack = () => {
-    // Navigate to previous step
     console.log('Moving to previous step');
   };
+
+  // Show loading state while data is being loaded from localStorage
+  if (!formLoaded || !experiencesLoaded) {
+    return (
+      <div className='min-h-screen bg-background p-6 flex items-center justify-center'>
+        <p className='text-muted-foreground'>Loading your data...</p>
+      </div>
+    );
+  }
 
   return (
     <div className='min-h-screen bg-background p-6'>
@@ -128,7 +168,7 @@ export default function WorkExperiencePage() {
                 <Input
                   id='jobTitle'
                   name='jobTitle'
-                  placeholder='Web, e.g., Manager'
+                  placeholder='e.g., Web Developer, Manager'
                   value={formData.jobTitle}
                   onChange={handleInputChange}
                   className='h-10'
@@ -217,7 +257,7 @@ export default function WorkExperiencePage() {
                   <Textarea
                     id='achievements'
                     name='achievements'
-                    placeholder='Drop file to browse'
+                    placeholder='List your key achievements...'
                     value={formData.achievements}
                     onChange={handleInputChange}
                     className='min-h-24 resize-none'
@@ -257,34 +297,102 @@ export default function WorkExperiencePage() {
                 <DropzoneContent />
               </Dropzone>
 
-              {/* Add Experience Link */}
-              <div className='mt-6 pt-4 border-t'>
-                <button
-                  type='button'
-                  className='text-green-600 hover:text-green-700 text-sm font-medium flex items-center gap-1'>
-                  <Plus size={16} />
-                  Add/Edit Work Experience
-                </button>
-              </div>
-
               {/* Form Buttons */}
               <div className='flex gap-3 mt-8'>
                 <Button
-                  type='button'
                   variant='outline'
-                  onClick={handleBack}
                   className='flex-1 h-11 bg-transparent'>
                   ← Back
                 </Button>
                 <Button
                   type='submit'
-                  className='flex-1 h-11 bg-green-600 hover:bg-green-700 text-white'>
+                  className='flex-1 h-11'>
                   Next →
                 </Button>
               </div>
             </form>
           </Card>
         )}
+
+        {/* Saved Experiences List */}
+        {experiences.length > 0 && (
+          <div className='space-y-4'>
+            <h2 className='text-2xl font-bold text-foreground'>
+              Your Experiences ({experiences.length})
+            </h2>
+            {experiences.map((experience) => (
+              <Card
+                key={experience.id}
+                className='p-6'>
+                <div className='flex items-start justify-between mb-4'>
+                  <div>
+                    <h3 className='text-xl font-bold text-foreground'>
+                      {experience.jobTitle}
+                    </h3>
+                    <p className='text-muted-foreground'>
+                      {experience.companyName}
+                    </p>
+                    <p className='text-sm text-muted-foreground mt-1'>
+                      {experience.startDate} to{' '}
+                      {experience.endDate || 'Present'}
+                    </p>
+                  </div>
+                  <div className='flex gap-2'>
+                    <Button
+                      variant='outline'
+                      size='sm'
+                      onClick={() => handleDelete(experience.id)}>
+                      <Trash2 size={16} />
+                    </Button>
+                  </div>
+                </div>
+
+                <div className='space-y-3'>
+                  {experience.jobDescription && (
+                    <div>
+                      <p className='text-sm font-semibold text-foreground'>
+                        Description
+                      </p>
+                      <p className='text-sm text-muted-foreground'>
+                        {experience.jobDescription}
+                      </p>
+                    </div>
+                  )}
+
+                  {experience.achievements && (
+                    <div>
+                      <p className='text-sm font-semibold text-foreground'>
+                        Achievements
+                      </p>
+                      <p className='text-sm text-muted-foreground'>
+                        {experience.achievements}
+                      </p>
+                    </div>
+                  )}
+
+                  {experience.skills.length > 0 && (
+                    <div>
+                      <p className='text-sm font-semibold text-foreground mb-2'>
+                        Skills
+                      </p>
+                      <div className='flex flex-wrap gap-2'>
+                        {experience.skills.map((skill, index) => (
+                          <span
+                            key={index}
+                            className='bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-xs'>
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </Card>
+            ))}
+          </div>
+        )}
+
+        {/* Action Buttons */}
       </div>
     </div>
   );
