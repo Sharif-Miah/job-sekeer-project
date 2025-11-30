@@ -1,5 +1,5 @@
-import localFont from 'next/font/local';
 import './globals.css';
+import { ToastContainer } from 'react-toastify';
 
 export const metadata = {
   title: 'Create Next App',
@@ -11,7 +11,10 @@ export default function RootLayout({ children }) {
     <html lang='en'>
       <body className={` antialiased`}>
         <div className='max-w-7xl mx-auto'>
-          <div className='lg:mb-10 lg:mt-20'>{children}</div>
+          <div className='lg:mb-10 lg:mt-20'>
+            {children}
+            <ToastContainer />
+          </div>
         </div>
       </body>
     </html>
