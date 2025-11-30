@@ -34,9 +34,11 @@ const EducationcertificateProgess = () => {
       </div>
       <ul className='flex justify-center items-center gap-10  mt-1'>
         <li className='list-none cursor-pointer '>Personal Information</li>
-        <li className='list-none text-green-500'>Career Summary</li>
+        <li className='list-none '>Career Summary</li>
         <li className='list-none cursor-pointer'>Skills & Experience</li>
-        <li className='list-none cursor-pointer'>Education & Certifications</li>
+        <li className='list-none cursor-pointer text-green-500'>
+          Education & Certifications
+        </li>
         <li className='list-none'>Contact Information</li>
         <li className='list-none cursor-pointer'>AI Resume Generation</li>
         <li className='list-none cursor-pointer'>Review & Download</li>
