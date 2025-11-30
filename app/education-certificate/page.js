@@ -111,9 +111,15 @@ export default function EducationForm() {
 
       {/* Navigation Buttons */}
       <div className='flex gap-4 pt-8 mt-8 border-t'>
-        <Button className='flex-1 bg-gray-500 hover:bg-gray-600 text-white'>
-          ← Back
-        </Button>
+        <Link
+          href='/work-experience-skills'
+          className='flex-1 h-11 bg-green-500 hover:bg-green-500 flex justify-center'>
+          <Button
+            type='submit'
+            className='flex-1 h-11 bg-green-500 hover:bg-green-500 '>
+            ← Back
+          </Button>
+        </Link>
         <Link
           href='/your-certificate'
           className='flex-1 h-11 bg-green-500 hover:bg-green-500 flex justify-center'>

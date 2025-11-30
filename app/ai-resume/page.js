@@ -70,11 +70,15 @@ export default function AIResumeForm() {
 
       {/* Navigation Buttons */}
       <div className='flex gap-4 mt-8'>
-        <Button
-          variant='outline'
-          className='flex-1 bg-gray-400 hover:bg-gray-500 text-white font-semibold py-3 rounded-lg text-base h-auto border-0'>
-          Back
-        </Button>
+        <Link
+          href='/contact-information'
+          className='flex-1 h-11 bg-green-500 hover:bg-green-500 flex justify-center'>
+          <Button
+            type='submit'
+            className='flex-1 h-11 bg-green-500 hover:bg-green-500 '>
+            ← Back
+          </Button>
+        </Link>
         <Link
           href='/review-your-resume'
           className='flex-1 h-11 bg-green-500 hover:bg-green-500 flex justify-center'>

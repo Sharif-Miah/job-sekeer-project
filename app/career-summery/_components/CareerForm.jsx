@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/select';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
+import Link from 'next/link';
 
 const CareerForm = () => {
   const [formData, setFormData] = useState({
@@ -121,16 +122,21 @@ const CareerForm = () => {
           />
         </div>
         <div className='flex gap-4 pt-8'>
-          <Button className='flex-1 bg-gray-500 hover:bg-gray-600 text-white'>
-            ← Back
-          </Button>
+          <Link
+            href='/personal-information'
+            className='flex-1 h-11 bg-green-500 hover:bg-green-500 flex justify-center'>
+            <Button
+              type='submit'
+              className='flex-1 h-11 bg-green-500 hover:bg-green-500 '>
+              ← Back
+            </Button>
+          </Link>
           <Button
             type='submit'
             className='flex-1 bg-green-500 hover:bg-green-600 text-white'>
             Next →
           </Button>
         </div>
-        ;
       </form>
     </>
   );

@@ -42,9 +42,15 @@ export default function CertificationsForm() {
 
       {/* Navigation Buttons */}
       <div className='flex gap-4 pt-8'>
-        <Button className='flex-1 bg-gray-500 hover:bg-gray-600 text-white'>
-          ← Back
-        </Button>
+        <Link
+          href='/education-certificate'
+          className='flex-1 h-11 bg-green-500 hover:bg-green-500 flex justify-center'>
+          <Button
+            type='submit'
+            className='flex-1 h-11 bg-green-500 hover:bg-green-500 '>
+            ← Back
+          </Button>
+        </Link>
         <Link
           href='/contact-information'
           className='flex-1 h-11 bg-green-500 hover:bg-green-500 flex justify-center'>

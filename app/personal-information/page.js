@@ -21,3 +21,13 @@ export default function PersonalInfoForm() {
     </div>
   );
 }
+
+//  <Link
+//    href='https://www.linkedin.com/in/sharif-miah'
+//    className='flex-1 h-11 bg-green-500 hover:bg-green-500 flex justify-center'>
+//    <Button
+//      type='submit'
+//      className='flex-1 h-11 bg-green-500 hover:bg-green-500 '>
+//      Next →
+//    </Button>
+//  </Link>;

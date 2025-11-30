@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { FileText, Download } from 'lucide-react';
 import { generateResumePDF } from '@/utils/utils';
+import { jsPDF } from 'jspdf';
 
 export default function ReviewResumeForm() {
   const [resumeData, setResumeData] = useState({
@@ -66,6 +67,15 @@ export default function ReviewResumeForm() {
   const handleEdit = () => {
     // Edit functionality would be implemented here
     console.log('Edit resume');
+  };
+
+  const handleDownload = () => {
+    const pdf = new jsPDF();
+
+    pdf.text('Hello Sharif!', 10, 10);
+    pdf.text('This is your generated PDF file.', 10, 20);
+
+    pdf.save('my-file.pdf');
   };
 
   return (
@@ -268,33 +278,7 @@ export default function ReviewResumeForm() {
 
         {/* Action Buttons */}
         <div className='flex gap-4'>
-          <Button
-            onClick={handleEdit}
-            variant='outline'
-            className='flex-1 bg-gray-400 hover:bg-gray-500 text-white font-semibold py-3 rounded-lg text-base h-auto border-0'>
-            Edit Resume
-          </Button>
           <div>
-            {/* Empty State */}
-            {!resumeData.personalInfo &&
-              !resumeData.contact &&
-              resumeData.workExperience.length === 0 &&
-              resumeData.education.length === 0 &&
-              resumeData.certifications.length === 0 && (
-                <Card className='p-12 bg-white border border-gray-200 text-center'>
-                  <FileText
-                    size={48}
-                    className='mx-auto text-gray-400 mb-4'
-                  />
-                  <h3 className='text-lg font-semibold text-gray-900 mb-2'>
-                    No Resume Data Found
-                  </h3>
-                  <p className='text-gray-600'>
-                    Start building your resume by filling out the forms.
-                  </p>
-                </Card>
-              )}
-
             {/* Action Buttons */}
             <div className='flex gap-4 pt-8'>
               <Button
@@ -303,7 +287,7 @@ export default function ReviewResumeForm() {
                 ← Back
               </Button>
               <Button
-                onClick={handleDownloadPDF}
+                onClick={handleDownload}
                 className='flex-1 bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center gap-2'>
                 <Download size={18} />
                 Download PDF
@@ -318,14 +302,24 @@ export default function ReviewResumeForm() {
 
       {/* Navigation Buttons */}
       <div className='flex gap-4 mt-8'>
-        <Button
-          variant='outline'
-          className='flex-1 bg-gray-400 hover:bg-gray-500 text-white font-semibold py-3 rounded-lg text-base h-auto border-0'>
-          Back
-        </Button>
-        <Button className='flex-1 bg-green-500 hover:bg-green-600 text-white font-semibold py-3 rounded-lg text-base h-auto'>
-          Next
-        </Button>
+        <Link
+          href='/ai-resume'
+          className='flex-1 h-11 bg-green-500 hover:bg-green-500 flex justify-center'>
+          <Button
+            type='submit'
+            className='flex-1 h-11 bg-green-500 hover:bg-green-500 '>
+            ← Back
+          </Button>
+        </Link>
+        <Link
+          href='https://www.linkedin.com/in/sharif-miah'
+          className='flex-1 h-11 bg-green-500 hover:bg-green-500 flex justify-center'>
+          <Button
+            type='submit'
+            className='flex-1 h-11 bg-green-500 hover:bg-green-500 '>
+            Next →
+          </Button>
+        </Link>
       </div>
     </div>
   );

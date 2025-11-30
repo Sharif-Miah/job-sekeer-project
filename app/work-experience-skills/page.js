@@ -301,11 +301,15 @@ export default function WorkExperiencePage() {
 
               {/* Form Buttons */}
               <div className='flex gap-3 mt-8'>
-                <Button
-                  variant='outline'
-                  className='flex-1 h-11 bg-transparent'>
-                  ← Back
-                </Button>
+                <Link
+                  href='/career-summery'
+                  className='flex-1 h-11 bg-green-500 hover:bg-green-500 flex justify-center'>
+                  <Button
+                    type='submit'
+                    className='flex-1 h-11 bg-green-500 hover:bg-green-500 '>
+                    ← Back
+                  </Button>
+                </Link>
                 <Link
                   href='/education-certificate'
                   className='flex-1 h-11 bg-green-500 hover:bg-green-500 flex justify-center'>
