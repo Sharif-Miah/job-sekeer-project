@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import ProgreesingBar from '@/components/ProgreesingBar';
 import Link from 'next/link';
+import ProgressInAI from './_component/ProgressInAI';
 
 export default function AIResumeForm() {
   const [progress, setProgress] = useState(0);
@@ -29,7 +30,7 @@ export default function AIResumeForm() {
     <div className='w-10/12 mx-auto'>
       <div className='bg-white rounded-lg shadow-sm p-8 md:p-12'>
         {/* Header */}
-        <ProgreesingBar />
+        <ProgressInAI />
         <div className='mb-8'>
           <h1 className='text-3xl md:text-4xl font-bold text-gray-900 mb-3'>
             AI Resume Magic

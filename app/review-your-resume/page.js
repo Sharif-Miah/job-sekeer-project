@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useReactToPrint } from 'react-to-print';
+import { usePDF } from 'react-to-pdf';
 
 import Image from 'next/image';
 import ImagePerson from '@/public/download.jpg';
@@ -23,6 +23,8 @@ export default function ReviewResumeForm() {
     certificate: [],
     contactInfo: '',
   });
+
+  const { toPDF, targetRef } = usePDF({ filename: 'page.pdf' });
 
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -56,14 +58,6 @@ export default function ReviewResumeForm() {
     return <div className='text-center p-8'>Loading resume data...</div>;
   }
 
-  const handleDownloadPDF = () => {
-    try {
-      generateResumePDF();
-    } catch (error) {
-      console.error('Error generating PDF:', error);
-    }
-  };
-
   const handleEdit = () => {
     // Edit functionality would be implemented here
     console.log('Edit resume');
@@ -93,7 +87,9 @@ export default function ReviewResumeForm() {
         </div>
 
         {/* Resume Preview Card */}
-        <div className='border border-gray-300 rounded-lg p-8 md:p-12 mb-8 bg-white'>
+        <div
+          ref={targetRef}
+          className='border border-gray-300 rounded-lg p-8 md:p-12 mb-8 bg-white'>
           {/* Personal information */}
 
           <div className='flex justify-around'>
@@ -114,7 +110,7 @@ export default function ReviewResumeForm() {
             </div>
             <div className='w-9/12'>
               <div>
-                <h2 className=' font-bold text-gray-900 mb-1 text-center md:text-left text-5xl'>
+                <h2 className=' font-bold text-gray-900 mb-1 text-center md:text-left text-5xl my-4'>
                   {resumeData?.personal?.firstName}{' '}
                   {resumeData?.personal?.lastName}
                 </h2>
@@ -122,7 +118,7 @@ export default function ReviewResumeForm() {
                   {resumeData?.careear?.jobTitle}
                 </p>
               </div>
-              <div className='flex   justify-start gap-10'>
+              <div className='flex   justify-start gap-10 mt-4'>
                 <p className='text-gray-600 text-sm text-center md:text-left '>
                   <span className='font-bold'>Phone</span>:{' '}
                   {resumeData?.personal?.phoneNumber}
@@ -287,7 +283,7 @@ export default function ReviewResumeForm() {
                 ← Back
               </Button>
               <Button
-                onClick={handleDownload}
+                onClick={() => toPDF()}
                 className='flex-1 bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center gap-2'>
                 <Download size={18} />
                 Download PDF
