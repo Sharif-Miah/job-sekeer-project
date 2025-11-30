@@ -1,15 +1,66 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import { useState, useEffect } from 'react';
+import { useReactToPrint } from 'react-to-print';
+
 import Image from 'next/image';
 import ImagePerson from '@/public/download.jpg';
 import ProgreesingBar from '@/components/ProgreesingBar';
 import ReviewProgress from './_component/ReviewProgress';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { FileText, Download } from 'lucide-react';
+import { generateResumePDF } from '@/utils/utils';
 
-export default function ReviewResumeForm({ onNext, onBack }) {
-  const handleDownload = () => {
-    // Download functionality would be implemented here
-    console.log('Download resume');
+export default function ReviewResumeForm() {
+  const [resumeData, setResumeData] = useState({
+    personalData: '',
+    careearData: '',
+    workExperience: '',
+    educationexpe: [''],
+    certificate: [],
+    contactInfo: '',
+  });
+
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    try {
+      const personalData = localStorage.getItem('personalInformation');
+      const careearData = localStorage.getItem('careerInformation');
+      const workExperience = localStorage.getItem('workExperienceFormData');
+      const educationexpe = localStorage.getItem('education_data');
+      const certificatex = localStorage.getItem('certifications_data');
+      const contact = localStorage.getItem('contactFormData');
+
+      setResumeData({
+        personal: personalData ? JSON.parse(personalData) : null,
+        careear: careearData ? JSON.parse(careearData) : null,
+        experience: workExperience ? JSON.parse(workExperience) : null,
+        educationer: educationexpe ? JSON.parse(educationexpe) : null,
+        certi: certificatex ? JSON.parse(certificatex) : null,
+        contactData: contact ? JSON.parse(contact) : null,
+      });
+      setIsLoaded(true);
+    } catch (error) {
+      console.error('Error loading resume data:', error);
+      setIsLoaded(true);
+    }
+  }, []);
+
+  console.log(resumeData.contactData);
+
+  if (!isLoaded) {
+    return <div className='text-center p-8'>Loading resume data...</div>;
+  }
+
+  const handleDownloadPDF = () => {
+    try {
+      generateResumePDF();
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+    }
   };
 
   const handleEdit = () => {
@@ -33,27 +84,56 @@ export default function ReviewResumeForm({ onNext, onBack }) {
 
         {/* Resume Preview Card */}
         <div className='border border-gray-300 rounded-lg p-8 md:p-12 mb-8 bg-white'>
-          <div className='grid grid-cols-1 md:grid-cols-4 gap-8'>
-            {/* Left Sidebar */}
-            <div className='md:col-span-1'>
-              {/* Profile Picture */}
+          {/* Personal information */}
+
+          <div className='flex justify-around'>
+            <div className='w-3/12'>
               <div className='mb-6 flex justify-center md:justify-start'>
                 <div className='w-24 h-24 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center overflow-hidden'>
                   <Image
-                    src={ImagePerson}
+                    src={resumeData.contactData.profilePhoto.data}
                     alt='Profile'
                     className='w-full h-full object-cover'
+                    width={100}
+                    height={100}
                   />
                 </div>
               </div>
 
               {/* Name */}
-              <h2 className='text-2xl font-bold text-gray-900 mb-1 text-center md:text-left'>
-                Sharif Miah
-              </h2>
-              <p className='text-gray-600 text-sm text-center md:text-left mb-6'>
-                Full Stack Developer
-              </p>
+            </div>
+            <div className='w-9/12'>
+              <div>
+                <h2 className=' font-bold text-gray-900 mb-1 text-center md:text-left text-5xl'>
+                  {resumeData?.personal?.firstName}{' '}
+                  {resumeData?.personal?.lastName}
+                </h2>
+                <p className='text-gray-600 text-lg text-center md:text-left mb-2'>
+                  {resumeData?.careear?.jobTitle}
+                </p>
+              </div>
+              <div className='flex   justify-start gap-10'>
+                <p className='text-gray-600 text-sm text-center md:text-left '>
+                  <span className='font-bold'>Phone</span>:{' '}
+                  {resumeData?.personal?.phoneNumber}
+                </p>
+                <p className='text-gray-600 text-sm text-center md:text-left mb-2'>
+                  <span className='font-bold'>Email</span>:{' '}
+                  {resumeData?.personal?.email}
+                </p>
+              </div>
+              <div className='className=text-gray-600 text-sm text-center md:text-left mb-8'>
+                <span className='font-bold'>Address </span>:{' '}
+                {`${resumeData?.personal?.address},
+                ${resumeData?.personal?.city}, ${resumeData?.personal?.country}`}
+              </div>
+            </div>
+          </div>
+
+          <div className='grid grid-cols-1 md:grid-cols-4 gap-8'>
+            {/* Left Sidebar */}
+            <div className='md:col-span-1'>
+              {/* Profile Picture */}
 
               {/* Portfolio Section */}
               <div className='mb-6'>
@@ -62,24 +142,24 @@ export default function ReviewResumeForm({ onNext, onBack }) {
                 </h3>
                 <ul className='space-y-2'>
                   <li>
-                    <a
-                      href='#'
+                    <Link
+                      href={resumeData.contactData.personalWebsite}
                       className='text-blue-600 hover:underline text-xs'>
-                      portfolio.example.com
-                    </a>
+                      portfolio
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href={resumeData.contactData.linkedinProfile}
+                      className='text-blue-600 hover:underline text-xs'>
+                      linkedin
+                    </Link>
                   </li>
                   <li>
                     <a
-                      href='#'
+                      href={resumeData.contactData.socialMediaUrl}
                       className='text-blue-600 hover:underline text-xs'>
-                      linkedin.com/in/saifur
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href='#'
-                      className='text-blue-600 hover:underline text-xs'>
-                      github.com/saifur
+                      Social Media
                     </a>
                   </li>
                 </ul>
@@ -89,13 +169,9 @@ export default function ReviewResumeForm({ onNext, onBack }) {
               <div className='mb-6'>
                 <h3 className='text-sm font-bold text-gray-900 mb-3'>SKILLS</h3>
                 <ul className='space-y-1 text-xs text-gray-700'>
-                  <li>Digital Marketing</li>
-                  <li>SEO Optimization</li>
-                  <li>Content Strategy</li>
-                  <li>Social Media</li>
-                  <li>Analytics</li>
-                  <li>Brand Management</li>
-                  <li>Project Management</li>
+                  {resumeData?.experience?.skills.map((sk) => (
+                    <li key={sk}>{sk}</li>
+                  ))}
                 </ul>
               </div>
 
@@ -131,13 +207,8 @@ export default function ReviewResumeForm({ onNext, onBack }) {
                 <h3 className='text-sm font-bold text-gray-900 mb-2'>
                   ABOUT ME
                 </h3>
-                <p className='text-xs text-gray-700 leading-relaxed'>
-                  Experienced marketing professional with over 5 years of
-                  expertise in digital marketing, specializing in SEO, social
-                  media strategies, and content creation. Proven track record of
-                  increasing brand visibility and driving measurable results.
-                  Passionate about leveraging data-driven insights to optimize
-                  marketing campaigns.
+                <p className='text-[13px] text-gray-700 leading-relaxed'>
+                  {resumeData?.careear?.careerSummary}
                 </p>
               </div>
 
@@ -146,22 +217,16 @@ export default function ReviewResumeForm({ onNext, onBack }) {
                 <h3 className='text-sm font-bold text-gray-900 mb-2'>
                   EDUCATION QUALIFICATION
                 </h3>
-                <div className='mb-3'>
-                  <p className='text-xs font-semibold text-gray-900'>
-                    Bachelor of Science in Business Administration
-                  </p>
-                  <p className='text-xs text-gray-700'>
-                    University of Technology (2020)
-                  </p>
-                </div>
-                <div>
-                  <p className='text-xs font-semibold text-gray-900'>
-                    Master of Marketing
-                  </p>
-                  <p className='text-xs text-gray-700'>
-                    Digital Institute (2022)
-                  </p>
-                </div>
+                {resumeData?.educationer.map((edu) => (
+                  <div
+                    key={edu.id}
+                    className='mb-3 flex gap-2'>
+                    <p className='text-xs font-semibold text-gray-900'>
+                      {edu.degree} -
+                    </p>
+                    <p className='text-xs text-gray-700'>{edu.institution}</p>
+                  </div>
+                ))}
               </div>
 
               {/* Training/Certification */}
@@ -170,9 +235,11 @@ export default function ReviewResumeForm({ onNext, onBack }) {
                   TRAINING/CERTIFICATION
                 </h3>
                 <ul className='space-y-1 text-xs text-gray-700'>
-                  <li>Google Analytics Certified</li>
-                  <li>HubSpot Content Marketing Certified</li>
-                  <li>Facebook Blueprint Certification</li>
+                  <div className='mb-3 flex gap-2'>
+                    <p className='text-xs font-semibold text-gray-900'>
+                      {resumeData?.experience?.achievements}
+                    </p>
+                  </div>
                 </ul>
               </div>
 
@@ -182,31 +249,16 @@ export default function ReviewResumeForm({ onNext, onBack }) {
                   WORK EXPERIENCE
                 </h3>
                 <div className='mb-4'>
-                  <p className='text-xs font-semibold text-gray-900'>
-                    Senior Marketing Specialist
+                  <p className='text-xs font-semibold text-gray-900 mb-1'>
+                    {resumeData?.experience?.jobTitle}
                   </p>
                   <p className='text-xs text-gray-700 mb-1'>
-                    Tech Solutions Inc. | 2022 - Present
+                    {resumeData?.experience?.companyName} |{' '}
+                    {resumeData?.experience?.startDate} -{' '}
+                    {resumeData?.experience?.endDate}
                   </p>
                   <p className='text-xs text-gray-700 leading-relaxed'>
-                    Led comprehensive marketing campaigns increasing brand
-                    awareness by 45%. Managed social media platforms with 100K+
-                    followers. Developed content strategy that improved
-                    engagement rates.
-                  </p>
-                </div>
-                <div>
-                  <p className='text-xs font-semibold text-gray-900'>
-                    Marketing Executive
-                  </p>
-                  <p className='text-xs text-gray-700 mb-1'>
-                    Digital Innovations Ltd. | 2020 - 2022
-                  </p>
-                  <p className='text-xs text-gray-700 leading-relaxed'>
-                    Executed SEO optimization strategies improving search
-                    rankings. Created and managed email marketing campaigns with
-                    35% open rate. Collaborated with cross-functional teams on
-                    product launches.
+                    {resumeData?.experience?.jobDescription}
                   </p>
                 </div>
               </div>
@@ -222,25 +274,56 @@ export default function ReviewResumeForm({ onNext, onBack }) {
             className='flex-1 bg-gray-400 hover:bg-gray-500 text-white font-semibold py-3 rounded-lg text-base h-auto border-0'>
             Edit Resume
           </Button>
-          <Button
-            onClick={handleDownload}
-            className='flex-1 bg-green-500 hover:bg-green-600 text-white font-semibold py-3 rounded-lg text-base h-auto'>
-            Download Resume
-          </Button>
+          <div>
+            {/* Empty State */}
+            {!resumeData.personalInfo &&
+              !resumeData.contact &&
+              resumeData.workExperience.length === 0 &&
+              resumeData.education.length === 0 &&
+              resumeData.certifications.length === 0 && (
+                <Card className='p-12 bg-white border border-gray-200 text-center'>
+                  <FileText
+                    size={48}
+                    className='mx-auto text-gray-400 mb-4'
+                  />
+                  <h3 className='text-lg font-semibold text-gray-900 mb-2'>
+                    No Resume Data Found
+                  </h3>
+                  <p className='text-gray-600'>
+                    Start building your resume by filling out the forms.
+                  </p>
+                </Card>
+              )}
+
+            {/* Action Buttons */}
+            <div className='flex gap-4 pt-8'>
+              <Button
+                variant='outline'
+                className='flex-1 bg-transparent'>
+                ← Back
+              </Button>
+              <Button
+                onClick={handleDownloadPDF}
+                className='flex-1 bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center gap-2'>
+                <Download size={18} />
+                Download PDF
+              </Button>
+              <Button className='flex-1 bg-green-600 hover:bg-green-700 text-white'>
+                Submit Resume →
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Navigation Buttons */}
       <div className='flex gap-4 mt-8'>
         <Button
-          onClick={onBack}
           variant='outline'
           className='flex-1 bg-gray-400 hover:bg-gray-500 text-white font-semibold py-3 rounded-lg text-base h-auto border-0'>
           Back
         </Button>
-        <Button
-          onClick={onNext}
-          className='flex-1 bg-green-500 hover:bg-green-600 text-white font-semibold py-3 rounded-lg text-base h-auto'>
+        <Button className='flex-1 bg-green-500 hover:bg-green-600 text-white font-semibold py-3 rounded-lg text-base h-auto'>
           Next
         </Button>
       </div>

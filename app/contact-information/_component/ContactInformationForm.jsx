@@ -1,6 +1,4 @@
 'use client';
-
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,20 +10,12 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useContactStorage } from '@/hook/useContactstorage';
-import { Download, Trash2, Upload } from 'lucide-react';
+import { Camera, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 
 const ContactInformationForm = () => {
-  const {
-    formData,
-    saveFormData,
-    handleFileUpload,
-    downloadFile,
-    removeFile,
-    isLoaded,
-  } = useContactStorage();
-
-  const [dragActive, setDragActive] = useState(false);
+  const { formData, saveFormData, handleFileUpload, removeFile, isLoaded } =
+    useContactStorage();
 
   if (!isLoaded) {
     return <div className='p-8 text-center'>Loading...</div>;
@@ -48,28 +38,7 @@ const ContactInformationForm = () => {
     saveFormData(newData);
   };
 
-  const handleDrag = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.type === 'dragenter' || e.type === 'dragover') {
-      setDragActive(true);
-    } else if (e.type === 'dragleave') {
-      setDragActive(false);
-    }
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-
-    const files = e.dataTransfer.files;
-    if (files && files[0]) {
-      handleFileUpload(files[0]);
-    }
-  };
-
-  const handleFileInputChange = (e) => {
+  const handlePhotoChange = (e) => {
     const files = e.target.files;
     if (files && files[0]) {
       handleFileUpload(files[0]);
@@ -155,77 +124,62 @@ const ContactInformationForm = () => {
         </div>
 
         <div className='space-y-2'>
-          <Label className='text-sm font-medium'>Upload Profile Photo</Label>
-          <div
-            onDragEnter={handleDrag}
-            onDragLeave={handleDrag}
-            onDragOver={handleDrag}
-            onDrop={handleDrop}
-            className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
-              dragActive
-                ? 'border-blue-500 bg-blue-50'
-                : 'border-gray-300 hover:border-gray-400'
-            }`}>
-            <input
-              type='file'
-              onChange={handleFileInputChange}
-              accept='image/*,.pdf,.doc,.docx'
-              className='hidden'
-              id='fileInput'
-            />
-            <label
-              htmlFor='fileInput'
-              className='cursor-pointer'>
-              <Upload
-                className='mx-auto mb-2 text-gray-400'
-                size={24}
-              />
-              <p className='text-sm text-gray-600'>
-                Drag and drop your file here or click to browse
-              </p>
-              <p className='text-xs text-gray-500 mt-1'>
-                Supported: Images, PDF, DOC, DOCX (Max 10MB)
-              </p>
-            </label>
-          </div>
+          <Label className='text-sm font-medium'>Profile Photo</Label>
 
-          {formData.profilePhoto && (
-            <div className='bg-gray-50 p-4 rounded-lg border border-gray-200'>
-              <div className='flex items-center justify-between'>
-                <div className='flex-1'>
-                  <p className='text-sm font-medium text-gray-900'>
-                    {formData.profilePhoto.name}
-                  </p>
-                  <p className='text-xs text-gray-500'>
-                    {(formData.profilePhoto.size / 1024).toFixed(2)} KB
-                  </p>
-                  <p className='text-xs text-gray-500'>
-                    Uploaded:{' '}
-                    {new Date(
-                      formData.profilePhoto.uploadedAt
-                    ).toLocaleDateString()}
-                  </p>
-                </div>
-                <div className='flex gap-2'>
-                  <Button
-                    type='button'
-                    size='sm'
-                    variant='outline'
-                    onClick={downloadFile}
-                    className='flex items-center gap-2'>
-                    <Download size={16} />
-                    Download
-                  </Button>
-                  <Button
-                    type='button'
-                    size='sm'
-                    variant='destructive'
-                    onClick={removeFile}
-                    className='flex items-center gap-2'>
-                    <Trash2 size={16} />
-                    Remove
-                  </Button>
-                </div>
+          {!formData.profilePhoto ? (
+            <div className='border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors hover:border-blue-400 bg-gray-50'>
+              <input
+                type='file'
+                onChange={handlePhotoChange}
+                accept='image/*'
+                capture='environment'
+                className='hidden'
+                id='photoInput'
+              />
+              <label
+                htmlFor='photoInput'
+                className='cursor-pointer flex flex-col items-center gap-2'>
+                <Camera
+                  className='text-gray-400'
+                  size={32}
+                />
+                <p className='text-sm font-medium text-gray-700'>
+                  Take or Upload Photo
+                </p>
+                <p className='text-xs text-gray-500'>
+                  Click to select or take a photo
+                </p>
+              </label>
+            </div>
+          ) : (
+            <div className='rounded-lg overflow-hidden border border-gray-200'>
+              <div className='relative'>
+                <img
+                  src={formData.profilePhoto.data || '/placeholder.svg'}
+                  alt='Profile'
+                  className='w-full h-64 object-cover'
+                />
+                <Button
+                  type='button'
+                  size='sm'
+                  variant='destructive'
+                  onClick={removeFile}
+                  className='absolute top-2 right-2 flex items-center gap-2'>
+                  <Trash2 size={16} />
+                  Remove
+                </Button>
+              </div>
+              <div className='p-3 bg-gray-50'>
+                <p className='text-xs text-gray-600'>
+                  Photo URL (stored in localStorage):{' '}
+                  {formData.profilePhoto.data.substring(0, 50)}...
+                </p>
+                <p className='text-xs text-gray-500 mt-1'>
+                  Uploaded:{' '}
+                  {new Date(
+                    formData.profilePhoto.uploadedAt
+                  ).toLocaleDateString()}
+                </p>
               </div>
             </div>
           )}

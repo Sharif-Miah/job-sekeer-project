@@ -74,6 +74,10 @@ const PersonalInformationForm = () => {
     }
   }
 
+  const myinfo = JSON.parse(localStorage.getItem('personalInformation'));
+
+  console.log(myinfo);
+
   return (
     <form
       onSubmit={onSubmit}
