@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { X, Plus, Trash2 } from 'lucide-react';
+import { X, Trash2 } from 'lucide-react';
 
 import SkillsInput from './_components/SkillsInput';
 import WorkExperienceProgress from './_components/WorkExperienceProgress';
@@ -14,7 +14,9 @@ import {
   DropzoneContent,
   DropzoneEmptyState,
 } from '@/components/ui/shadcn-io/dropzone';
+
 import { useLocalStorage } from '@/hook/useLocalStorage';
+import Link from 'next/link';
 
 const initialFormState = {
   jobTitle: '',
@@ -304,11 +306,15 @@ export default function WorkExperiencePage() {
                   className='flex-1 h-11 bg-transparent'>
                   ← Back
                 </Button>
-                <Button
-                  type='submit'
-                  className='flex-1 h-11'>
-                  Next →
-                </Button>
+                <Link
+                  href='/education-certificate'
+                  className='flex-1 h-11 bg-green-500 hover:bg-green-500 flex justify-center'>
+                  <Button
+                    type='submit'
+                    className='flex-1 h-11 bg-green-500 hover:bg-green-500 '>
+                    Next →
+                  </Button>
+                </Link>
               </div>
             </form>
           </Card>

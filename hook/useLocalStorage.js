@@ -1,8 +1,11 @@
 'use client';
+
+import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
 export function useLocalStorage(key, initialValue, options = {}) {
   const { serialize = JSON.stringify, deserialize = JSON.parse } = options;
+  const router = useRouter();
 
   // State to store our value
   const [storedValue, setStoredValue] = useState(initialValue);
