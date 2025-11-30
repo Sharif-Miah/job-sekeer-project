@@ -12,7 +12,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 const PersonalInformationForm = () => {
@@ -28,7 +27,8 @@ const PersonalInformationForm = () => {
     zipCode: '',
   });
 
-  const notify = () => toast.success('Success Fully Data Added!');
+  const notify = () =>
+    toast.success('Success Fully Personal Information Data Added!');
   const router = useRouter();
 
   // Load data from localStorage on mount

@@ -7,10 +7,10 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { Trash2, Plus } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
-import FileUploadArea from '../work-experience-skills/components/FileUploadArea';
+import FileUploadArea from '../work-experience-skills/_components/FileUploadArea';
 import ProgreesingBar from '@/components/ProgreesingBar';
 
-export default function EducationForm({ onNext, onBack, currentStep }) {
+export default function EducationForm() {
   const [degrees, setDegrees] = useState([
     {
       id: 1,
@@ -256,15 +256,10 @@ export default function EducationForm({ onNext, onBack, currentStep }) {
 
       {/* Navigation Buttons */}
       <div className='flex gap-4 pt-8'>
-        <Button
-          onClick={onBack}
-          disabled={currentStep === 0}
-          className='flex-1 bg-gray-500 hover:bg-gray-600 text-white'>
+        <Button className='flex-1 bg-gray-500 hover:bg-gray-600 text-white'>
           ← Back
         </Button>
-        <Button
-          onClick={onNext}
-          className='flex-1 bg-green-500 hover:bg-green-600 text-white'>
+        <Button className='flex-1 bg-green-500 hover:bg-green-600 text-white'>
           Next →
         </Button>
       </div>

@@ -7,22 +7,36 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { X, Plus } from 'lucide-react';
+import {
+  Dropzone,
+  DropzoneContent,
+  DropzoneEmptyState,
+} from '@/components/ui/shadcn-io/dropzone';
 
-import FileUploadArea from './components/FileUploadArea';
-import ProgressStepper from './components/ProgressStepper';
-import SkillsInput from './components/SkillsInput';
+import FileUploadArea from './_components/FileUploadArea';
+import ProgressStepper from './_components/ProgressStepper';
+import SkillsInput from './_components/SkillsInput';
 import ProgreesingBar from '@/components/ProgreesingBar';
+import WorkExperienceProgress from './_components/WorkExperienceProgress';
 
 export default function WorkExperiencePage() {
-  const [formData, setFormData] = useState({
-    jobTitle: '',
-    companyName: '',
-    startDate: '',
-    endDate: '',
-    jobDescription: '',
-    achievements: '',
-    skills: [],
-  });
+  const [formData, setFormData] = useState([
+    {
+      jobTitle: '',
+      companyName: '',
+      startDate: '',
+      endDate: '',
+      jobDescription: '',
+      achievements: '',
+      skills: [],
+    },
+  ]);
+
+  const [files, setFiles] = useState();
+  const handleDrop = (files) => {
+    console.log(files);
+    setFiles(files);
+  };
 
   const [experiences, setExperiences] = useState([]);
   const [showForm, setShowForm] = useState(true);
@@ -76,7 +90,7 @@ export default function WorkExperiencePage() {
     <div className='min-h-screen bg-background p-6'>
       <div className='max-w-4xl mx-auto'>
         {/* Progress Stepper */}
-        <ProgreesingBar />
+        <WorkExperienceProgress />
 
         {/* Header Section */}
         <div className='mt-8 mb-8'>
@@ -233,7 +247,15 @@ export default function WorkExperiencePage() {
               </div>
 
               {/* File Upload */}
-              <FileUploadArea />
+              <Dropzone
+                maxSize={1024 * 1024 * 10}
+                minSize={1024}
+                onDrop={handleDrop}
+                onError={console.error}
+                src={files}>
+                <DropzoneEmptyState />
+                <DropzoneContent />
+              </Dropzone>
 
               {/* Add Experience Link */}
               <div className='mt-6 pt-4 border-t'>
@@ -252,12 +274,12 @@ export default function WorkExperiencePage() {
                   variant='outline'
                   onClick={handleBack}
                   className='flex-1 h-11 bg-transparent'>
-                  Back
+                  ← Back
                 </Button>
                 <Button
                   type='submit'
                   className='flex-1 h-11 bg-green-600 hover:bg-green-700 text-white'>
-                  Next
+                  Next →
                 </Button>
               </div>
             </form>
