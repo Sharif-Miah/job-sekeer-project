@@ -2,6 +2,7 @@
 import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Download, Trash2 } from 'lucide-react';
+import Image from 'next/image';
 
 export default function ProfilePhotoUpload() {
   const [formData, setFormData] = useState({
@@ -74,7 +75,7 @@ export default function ProfilePhotoUpload() {
         {formData.profilePhoto?.preview && (
           <div className='bg-gray-50 p-4 rounded-lg border border-gray-200 mb-6'>
             <div className='mb-4'>
-              <img
+              <Image
                 src={formData.profilePhoto.preview || '/placeholder.svg'}
                 alt='Profile preview'
                 className='w-full h-48 object-cover rounded-md'

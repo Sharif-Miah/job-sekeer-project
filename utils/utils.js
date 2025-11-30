@@ -34,7 +34,7 @@ export const generateResumePDF = () => {
       <div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #4CAF50; padding-bottom: 20px;">
         ${
           personalInfo.profilePhoto?.data
-            ? `<img src="${personalInfo.profilePhoto.data}" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 15px;">`
+            ? `<Image src="${personalInfo.profilePhoto.data}" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 15px;">`
             : ''
         }
         <h1 style="margin: 10px 0; color: #2c3e50;">${
