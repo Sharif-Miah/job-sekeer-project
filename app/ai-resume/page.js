@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import ProgreesingBar from '@/components/ProgreesingBar';
+import Link from 'next/link';
 
-export default function AIResumeForm({ onNext, onBack }) {
+export default function AIResumeForm() {
   const [progress, setProgress] = useState(0);
   const [isGenerating, setIsGenerating] = useState(true);
 
@@ -70,17 +71,19 @@ export default function AIResumeForm({ onNext, onBack }) {
       {/* Navigation Buttons */}
       <div className='flex gap-4 mt-8'>
         <Button
-          onClick={onBack}
           variant='outline'
           className='flex-1 bg-gray-400 hover:bg-gray-500 text-white font-semibold py-3 rounded-lg text-base h-auto border-0'>
           Back
         </Button>
-        <Button
-          onClick={onNext}
-          disabled={isGenerating}
-          className='flex-1 bg-green-500 hover:bg-green-600 text-white font-semibold py-3 rounded-lg text-base h-auto'>
-          Next
-        </Button>
+        <Link
+          href='/review-your-resume'
+          className='flex-1 h-11 bg-green-500 hover:bg-green-500 flex justify-center'>
+          <Button
+            type='submit'
+            className='flex-1 h-11 bg-green-500 hover:bg-green-500 '>
+            Next →
+          </Button>
+        </Link>
       </div>
     </div>
   );

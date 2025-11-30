@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import ImagePerson from '@/public/download.jpg';
 import ProgreesingBar from '@/components/ProgreesingBar';
+import ReviewProgress from './_component/ReviewProgress';
 
 export default function ReviewResumeForm({ onNext, onBack }) {
   const handleDownload = () => {
@@ -20,7 +21,7 @@ export default function ReviewResumeForm({ onNext, onBack }) {
     <div className='w-10/12 mx-auto'>
       <div className='bg-white rounded-lg shadow-sm p-8 md:p-12'>
         {/* Header */}
-        <ProgreesingBar />
+        <ReviewProgress />
         <div className='mb-8'>
           <h1 className='text-3xl md:text-4xl font-bold text-gray-900 mb-2'>
             Review Your AI-Generated Resume
