@@ -15,15 +15,15 @@ import ProgreesingBar from '@/components/ProgreesingBar';
 
 export default function PersonalInfoForm({ onNext, onBack, currentStep }) {
   const [formData, setFormData] = useState({
-    firstName: 'First Name',
-    lastName: 'Last Name',
-    phoneNumber: 'Phone Number',
-    email: 'Email',
+    firstName: '',
+    lastName: '',
+    phoneNumber: '',
+    email: '',
     country: 'Bangladesh',
-    address: 'Address',
-    city: 'City',
-    state: 'State',
-    zipCode: 'ZIP Code',
+    address: '',
+    city: '',
+    state: '',
+    zipCode: '',
   });
 
   const handleInputChange = (e) => {
@@ -40,6 +40,8 @@ export default function PersonalInfoForm({ onNext, onBack, currentStep }) {
       country: value,
     }));
   };
+
+  console.log(formData);
 
   return (
     <div className='space-y-8 w-10/12 mx-auto'>
@@ -70,6 +72,7 @@ export default function PersonalInfoForm({ onNext, onBack, currentStep }) {
               value={formData.firstName}
               onChange={handleInputChange}
               className='border-gray-300'
+              placeholder='First Name'
             />
           </div>
           <div className='space-y-2'>
@@ -84,6 +87,7 @@ export default function PersonalInfoForm({ onNext, onBack, currentStep }) {
               value={formData.lastName}
               onChange={handleInputChange}
               className='border-gray-300'
+              placeholder='Last Name'
             />
           </div>
         </div>
@@ -103,6 +107,7 @@ export default function PersonalInfoForm({ onNext, onBack, currentStep }) {
               value={formData.phoneNumber}
               onChange={handleInputChange}
               className='border-gray-300'
+              placeholder='Phone Number'
             />
           </div>
           <div className='space-y-2'>
@@ -118,6 +123,7 @@ export default function PersonalInfoForm({ onNext, onBack, currentStep }) {
               value={formData.email}
               onChange={handleInputChange}
               className='border-gray-300'
+              placeholder='Email Address'
             />
           </div>
         </div>
@@ -157,6 +163,7 @@ export default function PersonalInfoForm({ onNext, onBack, currentStep }) {
               value={formData.address}
               onChange={handleInputChange}
               className='border-gray-300'
+              placeholder='Address'
             />
           </div>
         </div>
@@ -175,6 +182,7 @@ export default function PersonalInfoForm({ onNext, onBack, currentStep }) {
               value={formData.city}
               onChange={handleInputChange}
               className='border-gray-300'
+              placeholder='City'
             />
           </div>
           <div className='space-y-2'>
@@ -189,6 +197,7 @@ export default function PersonalInfoForm({ onNext, onBack, currentStep }) {
               value={formData.state}
               onChange={handleInputChange}
               className='border-gray-300'
+              placeholder='State'
             />
           </div>
           <div className='space-y-2'>
@@ -203,25 +212,26 @@ export default function PersonalInfoForm({ onNext, onBack, currentStep }) {
               value={formData.zipCode}
               onChange={handleInputChange}
               className='border-gray-300'
+              placeholder='ZIP Code'
             />
           </div>
+        </div>
+        <div className='flex gap-4 pt-8'>
+          <Button
+            onClick={onBack}
+            disabled={currentStep === 0}
+            className='flex-1 bg-gray-500 hover:bg-gray-600 text-white'>
+            ← Back
+          </Button>
+          <Button
+            onClick={onNext}
+            className='flex-1 bg-green-500 hover:bg-green-600 text-white'>
+            Next →
+          </Button>
         </div>
       </form>
 
       {/* Navigation Buttons */}
-      <div className='flex gap-4 pt-8'>
-        <Button
-          onClick={onBack}
-          disabled={currentStep === 0}
-          className='flex-1 bg-gray-500 hover:bg-gray-600 text-white'>
-          ← Back
-        </Button>
-        <Button
-          onClick={onNext}
-          className='flex-1 bg-green-500 hover:bg-green-600 text-white'>
-          Next →
-        </Button>
-      </div>
     </div>
   );
 }
