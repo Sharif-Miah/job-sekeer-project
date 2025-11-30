@@ -61,7 +61,7 @@ const PersonalInformationForm = () => {
   };
 
   // Handle form submission
-  async function onSubmit(event) {
+  function onSubmit(event) {
     event.preventDefault();
     try {
       // Save to localStorage

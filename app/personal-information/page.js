@@ -17,7 +17,6 @@ export default function PersonalInfoForm() {
 
       {/* Form */}
       <PersonalInformationForm />
-      {/* Navigation Buttons */}
     </div>
   );
 }

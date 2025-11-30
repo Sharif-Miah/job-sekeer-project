@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/select';
 import { useContactStorage } from '@/hook/useContactstorage';
 import { Camera, Trash2 } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 const ContactInformationForm = () => {
@@ -154,10 +155,12 @@ const ContactInformationForm = () => {
           ) : (
             <div className='rounded-lg overflow-hidden border border-gray-200'>
               <div className='relative'>
-                <img
+                <Image
                   src={formData.profilePhoto.data || '/placeholder.svg'}
                   alt='Profile'
                   className='w-full h-64 object-cover'
+                  width={100}
+                  height={100}
                 />
                 <Button
                   type='button'
